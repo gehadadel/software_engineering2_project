@@ -1,0 +1,52 @@
+package com.example.form.Controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.example.form.Entities.Store;
+import com.example.form.Repository.StoreRepository;
+
+
+
+@Controller
+public class StoreOwnerController {
+
+	@Autowired
+	StoreRepository StoreRepo;
+	
+	@GetMapping("/StoreOwnerHomePage")
+	public String StoreOwnerHomePage()
+	{
+		return "StoreOwnerHomePage";
+	}
+	
+	@GetMapping("/AddStore")
+	public String AddStore(Model model)
+    {
+        model.addAttribute("AddStore", new Product());
+        return "AddStore";
+    }
+	
+	
+	@PostMapping("/AddStore")
+	public String AddStore(@ModelAttribute Store store)
+	{
+		if(StoreRepo.existsById(store.getStorename()))
+    	{
+    		System.out.println("name exists");
+    		return "AddStore";
+    	}
+    	else
+    	{
+    		StoreRepo.save(store);
+    	}
+
+    	return "StoreOwnerHomePage";
+	}
+	
+
+}
